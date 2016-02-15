@@ -1,0 +1,49 @@
+<div class="container">
+    <div [hidden]="enviat">
+        <h1>Tarea</h1>
+        <form (ngSubmit)="agregar()" #tareaForm="ngForm">
+            <div class="form-group">
+                <label for="nom">nom</label>
+                <input type="text" class="form-control" required [(ngModel)]="model.nom" ngControl="nom" #nom="ngForm"> {{ model.nom }}
+                <div [hidden]="nom.valid" class="alert alert-danger">
+                    nom obligatori
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="curs">curs</label>
+                <select class="form-control" required [(ngModel)]="model.curs" ngControl="curs" #curs="ngForm">
+                    <option *ngFor="#c of cursos" [value]="c">{{c}}</option>
+                </select>
+                <div [hidden]="curs.valid" class="alert alert-danger">
+                    curs obligatori
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info active" [disabled]="!tareaForm.form.valid">Agregar</button>
+        </form>
+        <br>
+        <form (ngSubmit)="valida()" #tareaForm="ngForm">
+            <button type="submit" class="btn btn-info active" [disabled]="!tareaForm.form.valid">Enviar</button>
+        </form>
+    </div>
+
+    <div [hidden]="!enviat">
+        <h2>has enviat:</h2>
+        <div class="row">
+            <div class="col-xs-3">nom</div>
+            <div class="col-xs-9  pull-left">{{ model.nom }}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">curs</div>
+            <div class="col-xs-9 pull-left">{{ model.curs }}</div>
+        </div>
+        <br>
+        <button class="btn btn-info active" (click)="enviat=false">Editar</button>
+        <br>
+        <br>
+        <div class="controls">
+            <button class="btn btn-info active" ng-click="timeStart()" ng-disabled="disabled">Start</button>
+            <button class="btn btn-info active" ng-click="stopTimer()">Stop</button>
+            <button class="btn btn-info active" ng-click="resetTimer()">Reset</button>
+        </div>
+    </div>
+</div>
