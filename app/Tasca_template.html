@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="#tasca of tasques">
-                        <td>{{ tasca }} </td>
+                        <td>{{ model.task }} </td>
                         <td>
                             <button class="btn btn-info active" (click)="esborrarTasca(tasca)">Esborra</button>
                         </td>
@@ -36,8 +36,10 @@
         </form>
     </div>
     <div [hidden]="!enviat">
+        <br>
+        <br>
         <select class="form-control" #combo>
-            <option *ngFor="#tasca of tasques" [value]="tasca">{{tasca}}</option>
+            <option *ngFor="#tasca of tasques" [value]="tasca">{{model.task}}</option>
         </select>
         <button class="btn btn-info active" (click)="afegirTimer(combo.value)">Afegeix</button>
         <br>
@@ -45,12 +47,17 @@
         <div class="panel panel-default">
             <div class="panel-heading">Timer</div>
             <div class="panel-body" align='center'>
-                <h4>{{ timerTask }}</h4>
-                <h2>{{min}}:{{seg}}</h2>
+                <h4 #timerTaskName>{{ timerTask }}</h4>
+                <h2 #temps>{{min}}:{{seg}}</h2>
                 <div class="controls">
                     <button class="btn btn-info active" (click)="startTime()">Start</button>
                     <button class="btn btn-info active" (click)="stopTime()">Stop</button>
                     <button class="btn btn-info active" (click)="resetTime()">Reset</button>
+                </div>
+                <br>
+                <br>
+                <div class="controls">
+                    <button class="btn btn-info active" (click)="guarda(timerTask, min, seg)">Guarda</button>
                 </div>
             </div>
         </div>

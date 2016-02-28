@@ -1,9 +1,9 @@
 (function (app) {
     app.Tasca = Tasca;
 
-    function Tasca(nom, curs, min, seg, stateTime) {
-        this.nom = nom;
-        this.curs = curs;
+    function Tasca(id, task, min, seg, stateTime) {
+        this.id = id;
+        this.task = task;
         this.min = min;
         this.seg = seg;
         this.stateTime = stateTime;
