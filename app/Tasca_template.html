@@ -17,15 +17,19 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Tasca</th>
+                        <th>Temps</th>
                         <th>Operació</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="#tasca of tasques">
+                        <td>{{ tasca.id }} </td>
                         <td>{{ tasca.task }} </td>
+                        <td>{{ tasca.min }}:{{ tasca.seg }} </td>
                         <td>
-                            <button class="btn btn-info active" (click)="esborrarTasca(tasca)">Esborra</button>
+                            <button class="btn btn-info active" (click)="esborrarTasca(tasca.task)">Esborra</button>
                         </td>
                     </tr>
                 </tbody>
@@ -57,7 +61,7 @@
                 <br>
                 <br>
                 <div class="controls">
-                    <button class="btn btn-info active" (click)="guarda(idTask.value, task, min, seg)">Guarda</button>
+                    <button class="btn btn-info active" (click)="guarda(id, task, min, seg)">Guarda</button>
                 </div>
             </div>
         </div>

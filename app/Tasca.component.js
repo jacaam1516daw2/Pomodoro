@@ -1,6 +1,5 @@
 (function (app) {
     var idTask = 0;
-
     app.TascaFormComponent = ng.core
         .Component({
             selector: 'formulari',
@@ -9,31 +8,36 @@
         .Class({
             constructor: function () {
                 this.tasques = [];
-                this.min = 1;
-                this.seg = 3;
+                this.min = 24;
+                this.seg = 59;
                 this.stateTime = 0;
                 this.afegirTasca = function (tascaName) {
                     if (tascaName != '') {
                         idTask++;
                         this.model = new app.Tasca(idTask, tascaName, 24, 59, 0);
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
-                        this.tasques.push(this.model);
+                    }
+                    this.tasques = [];
+                    for (i = 1; i <= sessionStorage.length; i++) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
                     }
                 };
                 this.esborrarTasca = function (tasca) {
-                    this.tasques.splice(this.tasques.indexOf(tasca), 1)
+                    //var tasca = JSON.parse(sessionStorage.getItem(id));
+                    //sessionStorage.removeItem(id);
+                    this.tasques.splice(this.tasques.indexOf(tasca), 1);
                 };
                 this.guarda = function (id, task, min, seg) {
                     var t = JSON.parse(sessionStorage.getItem(id));
-                    this.task = t.task;
-                    this.min = min;
-                    this.seg = seg;
-                    this.stateTime = t.stateTime;
-                    sessionStorage.setItem(id, JSON.stringify(this.model));
+                    t.min = min;
+                    t.seg = seg;
+                    sessionStorage.removeItem(id);
+                    sessionStorage.setItem(id, JSON.stringify(t));
                     this.tasques = [];
-                    for (i = 0; i < idTask; i++) {
+                    for (i = 1; i <= sessionStorage.length; i++) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
                     }
+
                 };
                 this.startTime = function () {
                     this.stateTime = 1;
