@@ -1,5 +1,5 @@
 (function (app) {
-    var id = 0;
+    var idTask = 0;
 
     app.TascaFormComponent = ng.core
         .Component({
@@ -14,17 +14,27 @@
                 this.stateTime = 0;
                 this.afegirTasca = function (tascaName) {
                     if (tascaName != '') {
-                        id++;
-                        this.model = new app.Tasca(id, tascaName, 24, 59, 0);
-                        sessionStorage.setItem(id, JSON.stringify(this.model));
-                        //this.tasques.push(this.model);
-                        this.tasques.push(tascaName);
+                        idTask++;
+                        this.model = new app.Tasca(idTask, tascaName, 24, 59, 0);
+                        sessionStorage.setItem(idTask, JSON.stringify(this.model));
+                        this.tasques.push(this.model);
                     }
                 };
                 this.esborrarTasca = function (tasca) {
                     this.tasques.splice(this.tasques.indexOf(tasca), 1)
                 };
-                this.guarda = function (timerTask, min, seg) {};
+                this.guarda = function (id, task, min, seg) {
+                    var t = JSON.parse(sessionStorage.getItem(id));
+                    this.task = t.task;
+                    this.min = min;
+                    this.seg = seg;
+                    this.stateTime = t.stateTime;
+                    sessionStorage.setItem(id, JSON.stringify(this.model));
+                    this.tasques = [];
+                    for (i = 0; i < idTask; i++) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
+                    }
+                };
                 this.startTime = function () {
                     this.stateTime = 1;
                 };
@@ -36,12 +46,13 @@
                     this.seg = 59;
                     this.stateTime = 0;
                 };
-                this.afegirTimer = function (tasca) {
-                    this.timerTask = tasca;
-                    this.min = 24;
-                    this.seg = 59;
-                    this.stateTime = 0;
-                    this.storage = 0;
+                this.afegirTimer = function (id) {
+                    var t = JSON.parse(sessionStorage.getItem(id));
+                    this.id = t.id;
+                    this.task = t.task;
+                    this.min = t.min;
+                    this.seg = t.seg;
+                    this.stateTime = t.stateTime;
                 };
                 setInterval(() => {
                     if (this.stateTime == 1) {
