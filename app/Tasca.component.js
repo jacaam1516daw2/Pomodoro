@@ -18,15 +18,15 @@
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
                         this.tasques.push(this.model);
                     }
-                    //this.tasques = [];
-                    /*for (i = 1; i <= sessionStorage.length; i++) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
-                    }*/
                 };
                 this.esborrarTasca = function (id) {
                     var tasca = JSON.parse(sessionStorage.getItem(id));
                     sessionStorage.removeItem(id);
-                    this.tasques.splice(this.tasques.indexOf(tasca), 1);
+                    //this.tasques.splice(this.tasques.indexOf(tasca), 1);
+                    this.tasques = [];
+                    for (var key in sessionStorage) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
+                    }
                 };
                 this.guarda = function (id, task, min, seg) {
                     var tasca = JSON.parse(sessionStorage.getItem(id));
