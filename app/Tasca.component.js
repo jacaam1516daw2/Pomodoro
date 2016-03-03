@@ -16,28 +16,29 @@
                         idTask++;
                         this.model = new app.Tasca(idTask, tascaName, 24, 59, 0);
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
+                        this.tasques.push(this.model);
                     }
-                    this.tasques = [];
-                    for (i = 1; i <= sessionStorage.length; i++) {
+                    //this.tasques = [];
+                    /*for (i = 1; i <= sessionStorage.length; i++) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
-                    }
+                    }*/
                 };
-                this.esborrarTasca = function (tasca) {
-                    //var tasca = JSON.parse(sessionStorage.getItem(id));
-                    //sessionStorage.removeItem(id);
+                this.esborrarTasca = function (id) {
+                    var tasca = JSON.parse(sessionStorage.getItem(id));
+                    sessionStorage.removeItem(id);
                     this.tasques.splice(this.tasques.indexOf(tasca), 1);
                 };
                 this.guarda = function (id, task, min, seg) {
-                    var t = JSON.parse(sessionStorage.getItem(id));
-                    t.min = min;
-                    t.seg = seg;
+                    var tasca = JSON.parse(sessionStorage.getItem(id));
+                    tasca.id = id;
+                    tasca.task = task;
+                    tasca.min = min;
+                    tasca.seg = seg;
+                    tasca.stateTime = 0;
                     sessionStorage.removeItem(id);
-                    sessionStorage.setItem(id, JSON.stringify(t));
-                    this.tasques = [];
-                    for (i = 1; i <= sessionStorage.length; i++) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(i)));
-                    }
-
+                    sessionStorage.setItem(id, JSON.stringify(tasca));
+                    this.tasques.splice(this.tasques.indexOf(tasca), 1);
+                    this.tasques.push(tasca);
                 };
                 this.startTime = function () {
                     this.stateTime = 1;
