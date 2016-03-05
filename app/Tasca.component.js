@@ -13,7 +13,7 @@
                 this.fin = 0;
                 var a = new Date();
                 this.data = a;
-                this.stateTime = 0;
+                this.stateTime = 2;
                 this.afegirTasca = function (tascaName) {
                     if (tascaName != '') {
                         idTask++;
@@ -30,51 +30,49 @@
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
                 };
-                this.Time = function (state) {
-                    this.stateTime = parseInt(state);
-                    if (parseInt(state) == 0) {
-                        this.min = 0;
-                        this.seg = 3;
-                    }
-                    var tasca = JSON.parse(sessionStorage.getItem(this.id));
-                    tasca.min = this.min;
-                    tasca.seg = this.seg;
-                    tasca.fin = 0;
-                    tasca.stateTime = this.stateTime;
-                    sessionStorage.removeItem(tasca.id);
-                    sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
-                    this.tasques = [];
-                    for (var key in sessionStorage) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
-                    }
-                };
                 this.ordenar = function (order) {
-                    function compareTask(a, b) {
-                        if (a.task < b.task)
-                            return -1;
-                        else if (a.task > b.task)
-                            return 1;
-                        else
-                            return 0;
+                    function compareId(a, b) {
+                        return ((a.id < b.id) ? -1 : ((a.id > b.id) ? 1 : 0));
                     }
 
-                    function compareDate(a, b) {
-                        if (a.data < b.data)
-                            return -1;
-                        else if (a.data > b.data)
-                            return 1;
-                        else
-                            return 0;
+                    function compareTask(a, b) {
+                        return ((a.task < b.task) ? -1 : ((a.task > b.task) ? 1 : 0));
+                    }
+
+                    function compareTime(a, b) {
+                        return ((a.min * 60 + a.seg < a.seg * 60 + b.seg) ? -1 : ((a.min * 60 + a.seg > b.min * 60 + b.seg) ? 1 : 0));
+                    }
+
+                    function compareData(a, b) {
+                        return ((a.data < b.data) ? -1 : ((a.data > b.data) ? 1 : 0));
+                    }
+
+                    function compareState(a, b) {
+                        return ((a.fin < b.fin) ? -1 : ((a.fin > b.fin) ? 1 : 0));
                     }
 
                     this.tasques = [];
                     for (var key in sessionStorage) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
-                    if (parseInt(order) == 1) {
-                        this.tasques.sort(compareTask);
-                    } else {
-                        this.tasques.sort(compareDate);
+
+                    switch (parseInt(order)) {
+                        case 1:
+                            this.tasques.sort(compareId);
+                            break;
+                        case 2:
+                            this.tasques.sort(compareTask);
+                            break;
+                        case 3:
+                            this.tasques.sort(compareTime);
+                            break;
+                        case 4:
+                            this.tasques.sort(compareData);
+                            break;
+                        case 5:
+                            this.tasques.sort(compareState);
+                            break;
+                        default:
                     }
                 };
                 this.afegirTimer = function (id) {
@@ -87,33 +85,56 @@
                         this.stateTime = tasca.stateTime;
                     }
                 };
-                setInterval(() => {
-                    if (this.stateTime == 1) {
-                        this.seg--;
-                        if (this.seg == 0 && this.min != 0) {
-                            this.min--;
-                            this.seg = 3;
-                        }
-                        if (this.seg == 0 && this.min == 0) {
-                            this.stateTime = 2;
-                            this.fin = 1;
-                        }
-                    }
-                    if (this.seg == 0 && this.min == 0) {
-                        var tasca = JSON.parse(sessionStorage.getItem(this.id));
-                        tasca.min = this.min;
-                        tasca.seg = this.seg;
-                        tasca.fin = 1;
-                        tasca.stateTime = 0;
-                        sessionStorage.removeItem(tasca.id);
-                        sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
-                        this.tasques = [];
-                        for (var key in sessionStorage) {
-                            this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
-                        }
-                    }
-                }, 1000);
+                this.Time = function (state) {
+                    var interval = setInterval(() => {
+                        if (this.stateTime == 1) {
+                            this.seg--;
+                            if (this.seg == 0 && this.min != 0) {
+                                this.min--;
+                                this.seg = 3;
+                            }
+                            if (this.seg == 0 && this.min == 0) {
+                                this.stateTime = 2;
+                                this.fin = 1;
 
+                                var tasca = JSON.parse(sessionStorage.getItem(this.id));
+                                tasca.min = this.min;
+                                tasca.seg = this.seg;
+                                tasca.fin = 1;
+                                tasca.stateTime = 0;
+                                sessionStorage.removeItem(tasca.id);
+                                sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
+                                this.tasques = [];
+                                for (var key in sessionStorage) {
+                                    this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
+                                }
+                            }
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 1000);
+
+                    this.stateTime = parseInt(state);
+
+                    if (this.stateTime == 1) {
+                        interval;
+                    } else if (this.stateTime == 0) {
+                        this.min = 0;
+                        this.seg = 3;
+                    }
+
+                    var tasca = JSON.parse(sessionStorage.getItem(this.id));
+                    tasca.min = this.min;
+                    tasca.seg = this.seg;
+                    tasca.fin = 0;
+                    tasca.stateTime = this.stateTime;
+                    sessionStorage.removeItem(tasca.id);
+                    sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
+                    this.tasques = [];
+                    for (var key in sessionStorage) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
+                    }
+                };
                 this.enviat = false;
             },
             valida: function () {
