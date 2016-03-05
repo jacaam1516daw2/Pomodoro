@@ -11,9 +11,14 @@
                 this.min = 0;
                 this.seg = 3;
                 this.fin = 0;
-                var a = new Date();
-                this.data = a;
                 this.stateTime = 2;
+                var d = new Date();
+
+                function pad(s) {
+                    return (s < 10) ? '0' + s : s;
+                }
+                //Li donem format a les dates ja que els pipes de angular de date donen problemes
+                this.data = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
                 this.afegirTasca = function (tascaName) {
                     if (tascaName != '') {
                         idTask++;
@@ -40,7 +45,7 @@
                     }
 
                     function compareTime(a, b) {
-                        return ((a.min * 60 + a.seg < a.seg * 60 + b.seg) ? -1 : ((a.min * 60 + a.seg > b.min * 60 + b.seg) ? 1 : 0));
+                        return ((a.min * 60 + a.seg < b.seg * 60 + b.seg) ? -1 : ((a.min * 60 + a.seg > b.min * 60 + b.seg) ? 1 : 0));
                     }
 
                     function compareData(a, b) {
@@ -49,11 +54,6 @@
 
                     function compareState(a, b) {
                         return ((a.fin < b.fin) ? -1 : ((a.fin > b.fin) ? 1 : 0));
-                    }
-
-                    this.tasques = [];
-                    for (var key in sessionStorage) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
 
                     switch (parseInt(order)) {
@@ -86,17 +86,23 @@
                     }
                 };
                 this.Time = function (state) {
+                    //Temps del pomodoro
                     var interval = setInterval(() => {
+                        //segons l'estat start, stop , reset comrpobem
                         if (this.stateTime == 1) {
+                            //restem segons
                             this.seg--;
+                            //si segons es 0 pero min no es 0 restem in minut
                             if (this.seg == 0 && this.min != 0) {
                                 this.min--;
                                 this.seg = 3;
                             }
+                            // si seg = 0 i min = 0 guardem automaticament la tasca
                             if (this.seg == 0 && this.min == 0) {
                                 this.stateTime = 2;
                                 this.fin = 1;
 
+                                // guardem l'objecte i reomplim la array de tasques per que l'array i les dades de session storage siguin iguals
                                 var tasca = JSON.parse(sessionStorage.getItem(this.id));
                                 tasca.min = this.min;
                                 tasca.seg = this.seg;
@@ -110,19 +116,23 @@
                                 }
                             }
                         } else {
+                            // si es dona a stop o s'acaba el temps parem el set interval
                             clearInterval(interval);
                         }
                     }, 1000);
 
                     this.stateTime = parseInt(state);
 
+                    //si donem start al temps posem la tasca a estat = 1 i iniciem el set interval
                     if (this.stateTime == 1) {
                         interval;
                     } else if (this.stateTime == 0) {
+                        // si fem reset al temps inicialicem el temps de la tasca
                         this.min = 0;
                         this.seg = 3;
                     }
 
+                    // guardem l'objecte i reomplim la array de tasques per que l'array i les dades de session storage siguin iguals
                     var tasca = JSON.parse(sessionStorage.getItem(this.id));
                     tasca.min = this.min;
                     tasca.seg = this.seg;
