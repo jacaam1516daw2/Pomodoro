@@ -21,30 +21,10 @@
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
                         this.tasques.push(this.model);
                     }
-                    /*this.tasques = [];
-                    for (var key in sessionStorage) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
-                    }*/
                 };
                 this.esborrarTasca = function (id) {
                     var tasca = JSON.parse(sessionStorage.getItem(id));
                     sessionStorage.removeItem(id);
-                    this.tasques = [];
-                    for (var key in sessionStorage) {
-                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
-                    }
-                };
-                this.guarda = function (id, task, min, seg) {
-                    var tasca = JSON.parse(sessionStorage.getItem(id));
-                    tasca.id = id;
-                    tasca.task = task;
-                    tasca.min = min;
-                    tasca.seg = seg;
-                    tasca.stateTime = 0;
-                    sessionStorage.removeItem(id);
-                    sessionStorage.setItem(id, JSON.stringify(tasca));
-                    /* this.tasques.splice(this.tasques.indexOf(tasca), 1);
-                       this.tasques.push(tasca);*/
                     this.tasques = [];
                     for (var key in sessionStorage) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
@@ -55,6 +35,17 @@
                     if (parseInt(state) == 0) {
                         this.min = 0;
                         this.seg = 3;
+                    }
+                    var tasca = JSON.parse(sessionStorage.getItem(this.id));
+                    tasca.min = this.min;
+                    tasca.seg = this.seg;
+                    tasca.fin = 0;
+                    tasca.stateTime = this.stateTime;
+                    sessionStorage.removeItem(tasca.id);
+                    sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
+                    this.tasques = [];
+                    for (var key in sessionStorage) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
                 };
                 this.afegirTimer = function (id) {
@@ -75,6 +66,19 @@
                         if (this.seg == 0 && this.min == 0) {
                             this.stateTime = 2;
                             this.fin = 1;
+                        }
+                    }
+                    if (this.seg == 0 && this.min == 0) {
+                        var tasca = JSON.parse(sessionStorage.getItem(this.id));
+                        tasca.min = this.min;
+                        tasca.seg = this.seg;
+                        tasca.fin = 1;
+                        tasca.stateTime = 0;
+                        sessionStorage.removeItem(tasca.id);
+                        sessionStorage.setItem(tasca.id, JSON.stringify(tasca));
+                        this.tasques = [];
+                        for (var key in sessionStorage) {
+                            this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                         }
                     }
                 }, 1000);

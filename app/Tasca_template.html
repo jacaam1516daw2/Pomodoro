@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#tasca of tasques">
+                    <tr *ngFor="#tasca of tasques" class="info">
                         <td>{{ tasca.id }} </td>
                         <td>{{ tasca.task }} </td>
                         <td>{{ tasca.min }}:{{ tasca.seg }} </td>
@@ -46,10 +46,9 @@
     <div [hidden]="!enviat">
         <br>
         <br>
-        <select class="form-control" #combo>
+        <select class="form-control" #combo (click)="afegirTimer(combo.value)">
             <option *ngFor="#tasca of tasques" [value]="tasca.id">{{tasca.task}}</option>
         </select>
-        <button class="btn btn-info active" (click)="afegirTimer(combo.value)">Afegeix</button>
         <br>
         <br>
         <div class="panel panel-default">
@@ -64,9 +63,6 @@
                 </div>
                 <br>
                 <br>
-                <div class="controls">
-                    <button class="btn btn-info active" (click)="guarda(id, task, min, seg)">Guarda</button>
-                </div>
             </div>
         </div>
         <form (ngSubmit)="valida()" #tascaForm="ngForm">
