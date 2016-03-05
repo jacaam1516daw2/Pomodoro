@@ -20,6 +20,8 @@
                         <th>ID</th>
                         <th>Tasca</th>
                         <th>Temps</th>
+                        <th>Data</th>
+                        <th>Estat</th>
                         <th>Operació</th>
                     </tr>
                 </thead>
@@ -28,6 +30,8 @@
                         <td>{{ tasca.id }} </td>
                         <td>{{ tasca.task }} </td>
                         <td>{{ tasca.min }}:{{ tasca.seg }} </td>
+                        <td>{{ tasca.data}}</td>
+                        <td><img src="images/{{ tasca.fin }}.png" width="15px" height="15px"></td>
                         <td>
                             <button class="btn btn-info active" (click)="esborrarTasca(tasca.id)">Esborra</button>
                         </td>
