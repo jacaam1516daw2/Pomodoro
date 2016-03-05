@@ -9,6 +9,9 @@
                         <input #entrada>
                         <button class="btn btn-info active" (click)="afegirTasca(entrada.value)">Afegeix</button>
                     </div>
+                    <form (ngSubmit)="valida()" #tascaForm="ngForm">
+                        <button class="btn btn-info active">Pomodoro</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -18,16 +21,16 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tasca</th>
+                        <th (click)="ordenar('1')">Tasca</th>
                         <th>Temps</th>
-                        <th>Data</th>
+                        <th (click)="ordenar('1')">Data</th>
                         <th>Estat</th>
                         <th>Operació</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="#tasca of tasques" class="info">
-                        <td>{{ tasca.id }} </td>
+                        <td>{{ tasca.id }}</td>
                         <td>{{ tasca.task }} </td>
                         <td>{{ tasca.min }}:{{ tasca.seg }} </td>
                         <td>{{ tasca.data}}</td>
@@ -39,15 +42,6 @@
                 </tbody>
             </table>
         </div>
-        <form (ngSubmit)="valida()" #tascaForm="ngForm">
-            <button class="btn btn-info active">Llista</button>
-        </form>
-        <form (ngSubmit)="ordenar('1')" #tascaForm="ngForm">
-            <button class="btn btn-info active">Ordenar Tasca</button>
-        </form>
-        <form (ngSubmit)="ordenar('2')" #tascaForm="ngForm">
-            <button class="btn btn-info active">Ordenar Data</button>
-        </form>
     </div>
     <div [hidden]="!enviat">
         <br>

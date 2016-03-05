@@ -78,12 +78,14 @@
                     }
                 };
                 this.afegirTimer = function (id) {
-                    var tasca = JSON.parse(sessionStorage.getItem(id));
-                    this.id = tasca.id;
-                    this.task = tasca.task;
-                    this.min = tasca.min;
-                    this.seg = tasca.seg;
-                    this.stateTime = tasca.stateTime;
+                    if (id != "") {
+                        var tasca = JSON.parse(sessionStorage.getItem(id));
+                        this.id = tasca.id;
+                        this.task = tasca.task;
+                        this.min = tasca.min;
+                        this.seg = tasca.seg;
+                        this.stateTime = tasca.stateTime;
+                    }
                 };
                 setInterval(() => {
                     if (this.stateTime == 1) {
