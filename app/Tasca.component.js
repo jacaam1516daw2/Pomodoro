@@ -50,16 +50,12 @@
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
                 };
-                this.startTime = function () {
-                    this.stateTime = 1;
-                };
-                this.stopTime = function () {
-                    this.stateTime = 2;
-                };
-                this.resetTime = function () {
-                    this.min = 0;
-                    this.seg = 3;
-                    this.stateTime = 0;
+                this.Time = function (state) {
+                    this.stateTime = parseInt(state);
+                    if (parseInt(state) == 0) {
+                        this.min = 0;
+                        this.seg = 3;
+                    }
                 };
                 this.afegirTimer = function (id) {
                     var tasca = JSON.parse(sessionStorage.getItem(id));
