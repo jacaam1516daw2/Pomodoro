@@ -20,6 +20,7 @@
                 //Li donem format a les dates ja que els pipes de angular de date donen problemes
                 this.data = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
                 this.afegirTasca = function (tascaName) {
+                    // si la tasca es diferent de buit generem un id, guardem a sessionstorage i afegim a l'array
                     if (tascaName != '') {
                         idTask++;
                         this.model = new app.Tasca(idTask, tascaName, 0, 3, this.data, 0, 0);
@@ -28,6 +29,7 @@
                     }
                 };
                 this.esborrarTasca = function (id) {
+                    // borrem l'objecte i reomplim la array de tasques per que l'array i les dades de session storage siguin iguals
                     var tasca = JSON.parse(sessionStorage.getItem(id));
                     sessionStorage.removeItem(id);
                     this.tasques = [];
@@ -86,6 +88,7 @@
                     }
                 };
                 this.Time = function (state) {
+
                     //Temps del pomodoro
                     var interval = setInterval(() => {
                         //segons l'estat start, stop , reset comrpobem
@@ -125,11 +128,16 @@
 
                     //si donem start al temps posem la tasca a estat = 1 i iniciem el set interval
                     if (this.stateTime == 1) {
-                        interval;
+                        if (this.fin == 0) {
+                            interval;
+                        } else {
+                            this.stateTime = 2;
+                        }
                     } else if (this.stateTime == 0) {
                         // si fem reset al temps inicialicem el temps de la tasca
                         this.min = 0;
                         this.seg = 3;
+                        this.fin = 0;
                     }
 
                     // guardem l'objecte i reomplim la array de tasques per que l'array i les dades de session storage siguin iguals
@@ -144,6 +152,7 @@
                     for (var key in sessionStorage) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
+
                 };
                 this.enviat = false;
             },
