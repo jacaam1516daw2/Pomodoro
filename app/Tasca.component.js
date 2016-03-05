@@ -48,6 +48,35 @@
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
                 };
+                this.ordenar = function (order) {
+                    function compareTask(a, b) {
+                        if (a.task < b.task)
+                            return -1;
+                        else if (a.task > b.task)
+                            return 1;
+                        else
+                            return 0;
+                    }
+
+                    function compareDate(a, b) {
+                        if (a.data < b.data)
+                            return -1;
+                        else if (a.data > b.data)
+                            return 1;
+                        else
+                            return 0;
+                    }
+
+                    this.tasques = [];
+                    for (var key in sessionStorage) {
+                        this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
+                    }
+                    if (parseInt(order) == 1) {
+                        this.tasques.sort(compareTask);
+                    } else {
+                        this.tasques.sort(compareDate);
+                    }
+                };
                 this.afegirTimer = function (id) {
                     var tasca = JSON.parse(sessionStorage.getItem(id));
                     this.id = tasca.id;
@@ -84,12 +113,6 @@
                 }, 1000);
 
                 this.enviat = false;
-            },
-            transform: function (v, args) {
-                v.forEach(function (item, index) {
-                    v[index] = item.toUpperCase();
-                })
-                return v.sort().join(args[0]);
             },
             valida: function () {
                 this.enviat = true;

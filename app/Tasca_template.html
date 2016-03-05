@@ -42,6 +42,12 @@
         <form (ngSubmit)="valida()" #tascaForm="ngForm">
             <button class="btn btn-info active">Llista</button>
         </form>
+        <form (ngSubmit)="ordenar('1')" #tascaForm="ngForm">
+            <button class="btn btn-info active">Ordenar Tasca</button>
+        </form>
+        <form (ngSubmit)="ordenar('2')" #tascaForm="ngForm">
+            <button class="btn btn-info active">Ordenar Data</button>
+        </form>
     </div>
     <div [hidden]="!enviat">
         <br>
