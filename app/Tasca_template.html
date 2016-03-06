@@ -51,6 +51,7 @@
     <div [hidden]="!enviat">
         <br>
         <br>
+        <h2>Tasques</h2>
         <select class="form-control" #combo (click)="afegirTimer(combo.value)" (click)="mostra=true">
             <option *ngFor="#tasca of tasques" [value]="tasca.id">{{tasca.task}}</option>
         </select>
