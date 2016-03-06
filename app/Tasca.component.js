@@ -13,6 +13,7 @@
                 this.fin = 0;
                 this.breaking = 0;
                 this.stateTime = 2;
+                this.mostra = false;
                 var d = new Date();
                 for (var key in sessionStorage) {
                     this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
@@ -164,7 +165,6 @@
                     }
                 };
                 this.enviat = false;
-                this.mostra = false;
             },
             valida: function () {
                 this.enviat = true;
