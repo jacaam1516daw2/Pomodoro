@@ -11,8 +11,12 @@
                 this.min = 0;
                 this.seg = 3;
                 this.fin = 0;
+                this.breaking = 0;
                 this.stateTime = 2;
                 var d = new Date();
+                for (var key in sessionStorage) {
+                    this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
+                }
 
                 function pad(s) {
                     return (s < 10) ? '0' + s : s;
@@ -23,7 +27,7 @@
                     // si la tasca es diferent de buit generem un id, guardem a sessionstorage i afegim a l'array
                     if (tascaName != '') {
                         idTask++;
-                        this.model = new app.Tasca(idTask, tascaName, 0, 3, this.data, 0, 0);
+                        this.model = new app.Tasca(idTask, tascaName, 0, 3, this.data, 0, 0, 0);
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
                         this.tasques.push(this.model);
                     }
@@ -58,6 +62,10 @@
                         return ((a.fin < b.fin) ? -1 : ((a.fin > b.fin) ? 1 : 0));
                     }
 
+                    function compareBreak(a, b) {
+                        return ((a.breaking < b.breaking) ? -1 : ((a.breaking > b.breaking) ? 1 : 0));
+                    }
+
                     switch (parseInt(order)) {
                         case 1:
                             this.tasques.sort(compareId);
@@ -74,6 +82,9 @@
                         case 5:
                             this.tasques.sort(compareState);
                             break;
+                        case 6:
+                            this.tasques.sort(compareBreak);
+                            break;
                         default:
                     }
                 };
@@ -84,11 +95,11 @@
                         this.task = tasca.task;
                         this.min = tasca.min;
                         this.seg = tasca.seg;
+                        this.breaking = tasca.breaking;
                         this.stateTime = tasca.stateTime;
                     }
                 };
                 this.Time = function (state) {
-
                     //Temps del pomodoro
                     var interval = setInterval(() => {
                         //segons l'estat start, stop , reset comrpobem
@@ -100,15 +111,17 @@
                                 this.min--;
                                 this.seg = 3;
                             }
-                            // si seg = 0 i min = 0 guardem automaticament la tasca
+                            // si seg = 0 i min = 0 guardem automaticament la tasca i sumem mes 1 a break(descanso)
                             if (this.seg == 0 && this.min == 0) {
                                 this.stateTime = 2;
                                 this.fin = 1;
+                                this.breaking = this.breaking + 1;
 
                                 // guardem l'objecte i reomplim la array de tasques per que l'array i les dades de session storage siguin iguals
                                 var tasca = JSON.parse(sessionStorage.getItem(this.id));
                                 tasca.min = this.min;
                                 tasca.seg = this.seg;
+                                tasca.breaking = this.breaking;
                                 tasca.fin = 1;
                                 tasca.stateTime = 0;
                                 sessionStorage.removeItem(tasca.id);
@@ -128,11 +141,7 @@
 
                     //si donem start al temps posem la tasca a estat = 1 i iniciem el set interval
                     if (this.stateTime == 1) {
-                        if (this.fin == 0) {
-                            interval;
-                        } else {
-                            this.stateTime = 2;
-                        }
+                        interval;
                     } else if (this.stateTime == 0) {
                         // si fem reset al temps inicialicem el temps de la tasca
                         this.min = 0;
@@ -144,6 +153,7 @@
                     var tasca = JSON.parse(sessionStorage.getItem(this.id));
                     tasca.min = this.min;
                     tasca.seg = this.seg;
+                    tasca.breaking = this.breaking;
                     tasca.fin = 0;
                     tasca.stateTime = this.stateTime;
                     sessionStorage.removeItem(tasca.id);
@@ -152,12 +162,15 @@
                     for (var key in sessionStorage) {
                         this.tasques.push(JSON.parse(sessionStorage.getItem(key)));
                     }
-
                 };
                 this.enviat = false;
+                this.mostra = false;
             },
             valida: function () {
                 this.enviat = true;
+            },
+            mostra: function () {
+                this.mostra = true;
             },
         });
 })(window.app || (window.app = {}));

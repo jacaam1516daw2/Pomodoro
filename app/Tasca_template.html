@@ -1,7 +1,7 @@
 <div class="container">
     <div [hidden]="enviat">
-        <div>
-            <p>Recorda que si fas click a sobre de les capçaleres de la grid les tasques s'ordenen.</p>
+        <div class="alert alert-info">
+            <strong>Info!</strong> Recorda que si fas click a sobre de les capçaleres de la grid les tasques s'ordenen.
         </div>
         <h1>Tasca</h1>
         <div class="form-group">
@@ -28,6 +28,7 @@
                         <th (click)="ordenar('3')">Temps</th>
                         <th (click)="ordenar('4')">Data</th>
                         <th (click)="ordenar('5')">Estat</th>
+                        <th (click)="ordenar('6')">Break</th>
                         <th>Operació</th>
                     </tr>
                 </thead>
@@ -38,6 +39,7 @@
                         <td>{{ tasca.min }}:{{ tasca.seg }} </td>
                         <td>{{ tasca.data}}</td>
                         <td><img src="images/{{ tasca.fin }}.png" width="15px" height="15px"></td>
+                        <td>{{ tasca.breaking}}</td>
                         <td>
                             <button class="btn btn-info active" (click)="esborrarTasca(tasca.id)">Esborra</button>
                         </td>
@@ -49,16 +51,17 @@
     <div [hidden]="!enviat">
         <br>
         <br>
-        <select class="form-control" #combo (click)="afegirTimer(combo.value)">
+        <select class="form-control" #combo (click)="afegirTimer(combo.value)" (click)="mostra=true">
             <option *ngFor="#tasca of tasques" [value]="tasca.id">{{tasca.task}}</option>
         </select>
         <br>
         <br>
-        <div class="panel panel-default">
+        <div class="panel panel-default" [hidden]="!mostra">
             <div class="panel-heading">Timer</div>
             <div class="panel-body" align='center'>
-                <h4>ID: {{id}} Tasca: {{task}}</h4>
+                <h4>Tasca: {{task}}</h4>
                 <h2>{{min}}:{{seg}}</h2>
+                <h2>Break: {{breaking}}</h2>
                 <div class="controls">
                     <button class="btn btn-info active" (click)="Time('1')">Start</button>
                     <button class="btn btn-info active" (click)="Time('2')">Stop</button>
