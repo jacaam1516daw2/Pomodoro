@@ -8,8 +8,8 @@
         .Class({
             constructor: function () {
                 this.tasques = [];
-                this.min = 0;
-                this.seg = 3;
+                this.min = 24;
+                this.seg = 59;
                 this.fin = 0;
                 this.breaking = 0;
                 this.stateTime = 2;
@@ -28,7 +28,7 @@
                     // si la tasca es diferent de buit generem un id, guardem a sessionstorage i afegim a l'array
                     if (tascaName != '') {
                         idTask++;
-                        this.model = new app.Tasca(idTask, tascaName, 0, 3, this.data, 0, 0, 0);
+                        this.model = new app.Tasca(idTask, tascaName, 24, 59, this.data, 0, 0, 0);
                         sessionStorage.setItem(idTask, JSON.stringify(this.model));
                         this.tasques.push(this.model);
                     }
@@ -110,7 +110,7 @@
                             //si segons es 0 pero min no es 0 restem in minut
                             if (this.seg == 0 && this.min != 0) {
                                 this.min--;
-                                this.seg = 3;
+                                this.seg = 59;
                             }
                             // si seg = 0 i min = 0 guardem automaticament la tasca i sumem mes 1 a break(descanso)
                             if (this.seg == 0 && this.min == 0) {
@@ -145,8 +145,8 @@
                         interval;
                     } else if (this.stateTime == 0) {
                         // si fem reset al temps inicialicem el temps de la tasca
-                        this.min = 0;
-                        this.seg = 3;
+                        this.min = 24;
+                        this.seg = 59;
                         this.fin = 0;
                     }
 
